@@ -663,8 +663,8 @@ def main():
                 # Create matrix data with proper display names
                 bot_hour_status, display_names, hours = create_hourly_matrix(
                     processed_df,
-                    project_filter=selected_project if selected_project != 'All Projects' else None,
-                    status_filter=selected_status if selected_status != 'All Statuses' else None
+                    selected_project=selected_project,
+                    selected_status=selected_status
                 )
                 
                 logger.info(f"Matrix created with {len(display_names)} display names and {len(hours)} hours")
