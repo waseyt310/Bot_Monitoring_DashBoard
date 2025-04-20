@@ -18,6 +18,7 @@ import logging
 import gc
 import traceback
 from pathlib import Path
+import json
 from typing import Dict, List, Optional, Union, Any
 from data_processing.processors import process_data_for_dashboard, create_hourly_matrix
 from secure_db_connection import get_flow_data, test_connection
@@ -392,6 +393,57 @@ def filter_data_by_date(df, selected_date, use_latest=False):
         logger.error(f"Error filtering data by date: {e}")
         return pd.DataFrame()
 
+def create_flow_mapper():
+    """Create a mapping between flows and their projects"""
+    try:
+        # Read the Unique Projects sheet for mapping
+        df_mapping = pd.read_excel('Automation LTR.xlsx', sheet_name='Unique Projects')
+        header_row = df_mapping[df_mapping['Unnamed: 0'] == 'Automation Project Name'].index[0]
+        mapping_df = df_mapping.iloc[header_row + 1:].copy()
+        mapping_df.columns = df_mapping.iloc[header_row]
+        
+        # Create mapping dictionary
+        flow_mapping = {}
+        for _, row in mapping_df.iterrows():
+            if pd.notna(row['FlowName']):
+                flow_mapping[str(row['FlowName']).strip().lower()] = {
+                    'project': str(row['Automation Project Name']),
+                    'owner': str(row['Owner']) if pd.notna(row['Owner']) else 'Unassigned',
+                    'type': str(row['FlowType']) if pd.notna(row['FlowType']) else 'Unknown',
+                    'uow_type': str(row['UOW_Job_Type']) if pd.notna(row['UOW_Job_Type']) else 'Unknown'
+                }
+        return pd.DataFrame([(k, v['project'], v['owner'], v['type'], v['uow_type']) 
+                          for k, v in flow_mapping.items()],
+                          columns=['FlowName', 'Project', 'Owner', 'Type', 'UOW_Type'])
+    except Exception as e:
+        logger.error(f"Error creating flow mapping: {e}")
+        return pd.DataFrame(columns=['FlowName', 'Project', 'Owner', 'Type', 'UOW_Type'])
+
+def load_flow_mapping():
+    """Load or create flow mapping"""
+    try:
+        if Path('flow_mapping.csv').exists():
+            return pd.read_csv('flow_mapping.csv')
+        else:
+            mapping_df = create_flow_mapper()
+            mapping_df.to_csv('flow_mapping.csv', index=False)
+            return mapping_df
+    except Exception as e:
+        logger.error(f"Error loading flow mapping: {e}")
+        return pd.DataFrame(columns=['FlowName', 'Project', 'Owner', 'Type', 'UOW_Type'])
+
+def get_project_for_flow(flow_name, mapping_df):
+    """Get project name for a given flow"""
+    try:
+        if pd.isna(flow_name):
+            return 'Other Cloud Flow'
+        flow_name_lower = str(flow_name).strip().lower()
+        match = mapping_df[mapping_df['FlowName'].str.lower() == flow_name_lower]
+        return match['Project'].iloc[0] if not match.empty else 'Other Cloud Flow'
+    except Exception as e:
+        logger.error(f"Error getting project for flow {flow_name}: {e}")
+        return 'Other Cloud Flow'
+
 def initialize_session_state():
     """
     Initialize all session state variables needed for the dashboard
@@ -553,6 +605,7 @@ def main():
                     st.warning("Error in refresh calculation. Try refreshing manually.")
         
         # Use the already loaded data from the sidebar
+        # Use the already loaded data from the sidebar
         if df is not None and not df.empty:
             # Filter data for selected date
             filtered_df = filter_data_by_date(df, selected_date, use_latest)
@@ -561,35 +614,57 @@ def main():
                 st.warning(f"No data available for selected date: {selected_date}")
                 return
                 
+            # Load flow mapping
+            flow_mapping = load_flow_mapping()
+            
             # Process data for dashboard display
             processed_df = process_data_for_dashboard(filtered_df)
             
+            # Add project information from mapping
+            if 'flowname' in processed_df.columns:
+                processed_df['automation_project'] = processed_df['flowname'].apply(
+                    lambda x: get_project_for_flow(x, flow_mapping)
+                )
+            
             if processed_df is not None and not processed_df.empty:
                 # Filter controls
-                col1, col2 = st.columns(2)
+                col1, col2, col3 = st.columns(3)
                 
                 with col1:
                     projects = ['All Projects'] + sorted(processed_df['automation_project'].unique().tolist())
                     selected_project = st.selectbox("Select Project", projects)
-                
+
                 with col2:
                     statuses = ['All Statuses'] + sorted(processed_df['taskstatus'].unique().tolist())
                     selected_status = st.selectbox("Select Status", statuses)
+
+                with col3:
+                    owners = ['All Owners'] + sorted(processed_df['owner'].unique().tolist())
+                    selected_owner = st.selectbox("Select Owner", owners)
+                    
+                # Apply filters
+                if selected_project != 'All Projects':
+                    processed_df = processed_df[processed_df['automation_project'] == selected_project]
+                if selected_status != 'All Statuses':
+                    processed_df = processed_df[processed_df['taskstatus'] == selected_status]
+                if selected_owner != 'All Owners':
+                    processed_df = processed_df[processed_df['owner'] == selected_owner]
                 
                 # Create matrix data
                 bot_hour_status, display_names, hours = create_hourly_matrix(
                     processed_df,
-                    selected_project,
-                    selected_status
+                    selected_project if selected_project != 'All Projects' else None,
+                    selected_status if selected_status != 'All Statuses' else None
                 )
                 
+                # Display matrix
                 # Display matrix
                 st.markdown("### Bot Activity Matrix")
                 display_matrix(bot_hour_status, display_names, hours)
                 
-                # Show summary statistics
+                # Show summary statistics with project information
                 st.markdown("### Data Summary")
-                col1, col2, col3 = st.columns(3)
+                col1, col2, col3, col4 = st.columns(4)
                 
                 with col1:
                     st.subheader("Status Distribution")
@@ -602,6 +677,11 @@ def main():
                     st.bar_chart(project_counts)
                 
                 with col3:
+                    st.subheader("Owner Distribution")
+                    owner_counts = processed_df['owner'].value_counts()
+                    st.bar_chart(owner_counts)
+                
+                with col4:
                     st.subheader("Success Rate")
                     if 'success_rate' in processed_df.columns:
                         avg_success = processed_df['success_rate'].mean()
@@ -609,13 +689,20 @@ def main():
                     else:
                         success_rate = processed_df['wassuccessful'].mean() * 100
                         st.metric("Overall Success Rate", f"{success_rate:.1f}%")
-            else:
-                st.warning("Error processing data. Please check logs.")
+                    
+                    # Success rate by project
+                    project_success = processed_df.groupby('automation_project')['wassuccessful'].mean() * 100
+                    st.markdown("#### Success Rate by Project")
+                    # Add sorting and formatting
+                    project_success_df = (project_success
+                        .sort_values(ascending=False)
+                        .round(1)
+                        .to_frame('Success Rate %'))
+                    st.dataframe(project_success_df, use_container_width=True)
         else:
             st.error("No data available. Please check data source and try again.")
     
     except Exception as e:
-        # Store error in session state for troubleshooting
         try:
             st.session_state.last_error = str(e)
         except:

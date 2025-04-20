@@ -163,10 +163,13 @@ def process_data_for_dashboard(df: pd.DataFrame, day_filter: Optional[Union[str,
                 # Continue with unfiltered data
         
         # Add derived columns
+        # Add derived columns
         processed_df['hour'] = pd.to_datetime(processed_df['datetimestarted']).dt.hour
         processed_df['owner'] = processed_df['flowowner'].str.replace(' serviceaccount', '').str.title()
-        processed_df['automation_project'] = processed_df['flowname'].apply(extract_project_name)
         
+        # Only extract project name if automation_project doesn't exist
+        if 'automation_project' not in processed_df.columns:
+            processed_df['automation_project'] = processed_df['flowname'].apply(extract_project_name)
         # Add trigger type grouping
         if 'triggertype' in processed_df.columns:
             conditions = [
