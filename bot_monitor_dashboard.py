@@ -631,9 +631,25 @@ def main():
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
-                    all_projects = sorted(processed_df['automation_project'].unique().tolist())
-                    specific_projects = [p for p in all_projects if p != 'Other Cloud Flow']
-                    projects = ['All Projects'] + specific_projects + (['Other Cloud Flow'] if 'Other Cloud Flow' in all_projects else [])
+                    # Get all possible projects from flow mapping
+                    try:
+                        with open('flow_mapping.json', 'r') as f:
+                            flow_mapping = json.load(f)
+                        mapped_projects = sorted(set(info['project'] for info in flow_mapping.values()))
+                    except Exception as e:
+                        logger.warning(f"Could not load projects from mapping: {e}")
+                        mapped_projects = []
+                    
+                    # Combine with projects from current data
+                    current_projects = sorted(processed_df['automation_project'].unique().tolist())
+                    all_projects = sorted(set(mapped_projects + current_projects))
+                    
+                    # Remove 'Other Cloud Flow' to add it at the end
+                    if 'Other Cloud Flow' in all_projects:
+                        all_projects.remove('Other Cloud Flow')
+                    
+                    # Create final project list
+                    projects = ['All Projects'] + all_projects + ['Other Cloud Flow']
                     selected_project = st.selectbox("Select Project", projects)
 
                 with col2:
@@ -726,6 +742,7 @@ def main():
                     st.bar_chart(owner_counts)
                 
                 with col4:
+                with col4:
                     st.subheader("Success Rate")
                     if 'success_rate' in processed_df.columns:
                         avg_success = processed_df['success_rate'].mean()
@@ -733,43 +750,79 @@ def main():
                     else:
                         success_rate = processed_df['wassuccessful'].mean() * 100
                         st.metric("Overall Success Rate", f"{success_rate:.1f}%")
-                    
-                    # Success rate by project
-                    # Success rate by project with better formatting
-                    project_success = (processed_df.groupby('automation_project')
-                        .agg({
-                            'wassuccessful': 'mean',
-                            'flowname': 'count'
-                        })
-                        .assign(
-                            success_rate=lambda x: x['wassuccessful'] * 100,
-                            flow_count=lambda x: x['flowname']
-                        )
-                        .sort_values('success_rate', ascending=False)
-                    )
-
-                    st.markdown("#### Success Rate by Project")
-                    # Create a formatted dataframe for display
-                    success_display = pd.DataFrame({
-                        'Project': project_success.index,
-                        'Success Rate (%)': project_success['success_rate'].round(1),
-                        'Flow Count': project_success['flow_count']
+                
+                # Success rate by project with enhanced metrics - moved outside of col4
+                project_metrics = (processed_df.groupby('automation_project')
+                    .agg({
+                        'wassuccessful': ['count', 'mean'],
+                        'taskstatus': lambda x: (x == 'Failed').mean(),
+                        'flowname': 'nunique'
                     })
-                    st.dataframe(
-                        success_display,
-                        use_container_width=True,
-                        hide_index=True,
-                        column_config={
-                            'Success Rate (%)': st.column_config.NumberColumn(
-                                format="%.1f%%",
-                                help="Average success rate for the project"
-                            ),
-                            'Flow Count': st.column_config.NumberColumn(
-                                help="Number of flows in the project"
-                            )
-                        }
-                    )
-                # New Analytics Section
+                    .round(4)
+                )
+
+                # Create multi-level column names
+                project_metrics.columns = [
+                    'Total Executions',
+                    'Success Rate',
+                    'Failure Rate',
+                    'Unique Flows'
+                ]
+
+                # Calculate metrics
+                project_metrics['Success Rate'] = project_metrics['Success Rate'] * 100
+                project_metrics['Failure Rate'] = project_metrics['Failure Rate'] * 100
+                project_metrics['Health Score'] = (
+                    project_metrics['Success Rate'] - 
+                    (project_metrics['Failure Rate'] * 2)
+                ).round(1)
+
+                # Create display dataframe with better formatting
+                success_display = pd.DataFrame({
+                    'Project': project_metrics.index,
+                    'Success Rate': project_metrics['Success Rate'].round(1),
+                    'Failed Rate': project_metrics['Failure Rate'].round(1),
+                    'Total Runs': project_metrics['Total Executions'],
+                    'Active Flows': project_metrics['Unique Flows'],
+                    'Health Score': project_metrics['Health Score']
+                })
+
+                # Display with better formatting
+                st.markdown("### Project Performance Metrics")
+                st.dataframe(
+                    success_display.sort_values('Health Score', ascending=False),
+                    use_container_width=True,
+                    hide_index=True,
+                    column_config={
+                        'Project': st.column_config.TextColumn(
+                            'Project Name',
+                            help='Automation project name'
+                        ),
+                        'Success Rate': st.column_config.NumberColumn(
+                            'Success Rate',
+                            format="%.1f%%",
+                            help="Percentage of successful executions"
+                        ),
+                        'Failed Rate': st.column_config.NumberColumn(
+                            'Failure Rate',
+                            format="%.1f%%",
+                            help="Percentage of failed executions"
+                        ),
+                        'Total Runs': st.column_config.NumberColumn(
+                            'Total Executions',
+                            help="Total number of flow executions"
+                        ),
+                        'Active Flows': st.column_config.NumberColumn(
+                            'Active Flows',
+                            help="Number of distinct flows in the project"
+                        ),
+                        'Health Score': st.column_config.NumberColumn(
+                            'Health Score',
+                            format="%.1f",
+                            help="Project health score (Success Rate - 2 × Failure Rate)"
+                        )
+                    }
+                )
                 st.markdown("### Additional Analytics")
                 
                 # 1. Performance Metrics
