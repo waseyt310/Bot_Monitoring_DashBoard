@@ -304,17 +304,7 @@ def display_matrix(bot_hour_status, display_names, hours, enable_grouping=True):
             hide_index=True
         )
         
-        # Add status legend for reference
-        st.markdown("### Status Legend")
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.markdown(f"{STATUS_EMOJIS['Succeeded']} **Succeeded/Completed**")
-        with col2:
-            st.markdown(f"{STATUS_EMOJIS['Failed']} **Failed/Error**")
-        with col3:
-            st.markdown(f"{STATUS_EMOJIS['Running']} **Running/In Progress**")
-        with col4:
-            st.markdown(f"{STATUS_EMOJIS['No Run']} **No Run/Skipped**")
+        # Removed status legend from here (moved to before the matrix display)
             
     except Exception as e:
         logger.error(f"Error displaying matrix: {e}", exc_info=True)
@@ -667,15 +657,53 @@ def main():
                     selected_status=selected_status
                 )
                 
+                
                 logger.info(f"Matrix created with {len(display_names)} display names and {len(hours)} hours")
                 
-                # Display matrix
+                # Add spacing before Status Legend
+                st.markdown("<br>", unsafe_allow_html=True)
+
+                # Enhanced Status Legend with better styling
+                st.markdown("""
+                    <style>
+                    .status-legend {
+                        padding: 10px;
+                        border-radius: 5px;
+                        background-color: #f8f9fa;
+                        margin-bottom: 20px;
+                    }
+                    .legend-item {
+                        display: inline-block;
+                        margin-right: 20px;
+                        padding: 5px 10px;
+                    }
+                    </style>
+                """, unsafe_allow_html=True)
+
+                st.markdown("### Status Legend")
+                st.markdown('<div class="status-legend">', unsafe_allow_html=True)
+                legend_cols = st.columns(5)
+                with legend_cols[0]:
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Succeeded"]} **Succeeded/Completed**</div>', unsafe_allow_html=True)
+                with legend_cols[1]:
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Failed"]} **Failed/Error**</div>', unsafe_allow_html=True)
+                with legend_cols[2]:
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Running"]} **Running/In Progress**</div>', unsafe_allow_html=True)
+                with legend_cols[3]:
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["No Run"]} **No Run/Skipped**</div>', unsafe_allow_html=True)
+                with legend_cols[4]:
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Canceled"]} **Canceled**</div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
+
+                # Add spacing after legend
+                st.markdown("<br>", unsafe_allow_html=True)
+                
+                # Then display matrix
                 if display_names:  # Check if we have data to display
                     st.markdown("### Bot Activity Matrix")
                     display_matrix(bot_hour_status, display_names, hours)
                 else:
                     st.warning("No data to display for the selected filters.")
-                
                 # Show summary statistics with project information
                 st.markdown("### Data Summary")
                 col1, col2, col3, col4 = st.columns(4)
@@ -713,6 +741,88 @@ def main():
                         .round(1)
                         .to_frame('Success Rate %'))
                     st.dataframe(project_success_df, use_container_width=True)
+                    
+                # New Analytics Section
+                st.markdown("### Additional Analytics")
+                
+                # 1. Performance Metrics
+                st.subheader("Performance Metrics")
+                metric_cols = st.columns(4)
+                
+                with metric_cols[0]:
+                    try:
+                        avg_duration = processed_df['datetimecompleted'].dt.timestamp() - processed_df['datetimestarted'].dt.timestamp()
+                        avg_duration_mins = avg_duration.mean() / 60
+                        st.metric("Average Duration", f"{avg_duration_mins:.1f} mins")
+                    except:
+                        st.metric("Average Duration", "N/A")
+                
+                with metric_cols[1]:
+                    failure_rate = (processed_df['taskstatus'] == 'Failed').mean() * 100
+                    st.metric("Failure Rate", f"{failure_rate:.1f}%")
+                
+                with metric_cols[2]:
+                    total_runs = len(processed_df)
+                    st.metric("Total Executions", f"{total_runs:,}")
+                
+                with metric_cols[3]:
+                    active_flows = processed_df['flowname'].nunique()
+                    st.metric("Active Flows", f"{active_flows:,}")
+
+                # 2. Hourly Trends
+                st.subheader("Execution Trends")
+                trend_cols = st.columns(2)
+                
+                with trend_cols[0]:
+                    st.markdown("#### Hourly Distribution")
+                    hourly_dist = processed_df.groupby(processed_df['datetimestarted'].dt.hour)['flowname'].count()
+                    st.bar_chart(hourly_dist)
+                
+                with trend_cols[1]:
+                    st.markdown("#### Success Rate by Hour")
+                    hourly_success = processed_df.groupby(processed_df['datetimestarted'].dt.hour)['wassuccessful'].mean() * 100
+                    st.line_chart(hourly_success)
+
+                # 3. Top Issues Analysis
+                st.subheader("Issue Analysis")
+                issue_cols = st.columns(2)
+                
+                with issue_cols[0]:
+                    st.markdown("#### Top Failing Flows")
+                    failed_df = processed_df[processed_df['taskstatus'] == 'Failed']
+                    if not failed_df.empty:
+                        failed_flows = (failed_df
+                                      .groupby('flowname')
+                                      .size()
+                                      .sort_values(ascending=False)
+                                      .head(5))
+                        st.bar_chart(failed_flows)
+                    else:
+                        st.info("No failed flows in the selected timeframe.")
+                
+                with issue_cols[1]:
+                    st.markdown("#### Project Health Score")
+                    project_health = (processed_df.groupby('automation_project')
+                                    .agg({
+                                        'wassuccessful': 'mean',
+                                        'taskstatus': lambda x: (x == 'Failed').mean()
+                                    })
+                                    .assign(health_score=lambda x: (x['wassuccessful'] * 100 - x['taskstatus'] * 50))
+                                    .sort_values('health_score', ascending=False))
+                    st.dataframe(project_health.round(2))
+
+                # 4. Execution Timeline
+                st.subheader("Execution Timeline")
+                try:
+                    timeline_data = (processed_df.groupby(pd.Grouper(key='datetimestarted', freq='15T'))
+                                   .agg({
+                                       'flowname': 'count',
+                                       'wassuccessful': 'mean'
+                                   }))
+                    st.line_chart(timeline_data)
+                except Exception as e:
+                    logger.warning(f"Could not generate timeline: {e}")
+                    st.warning("Could not generate execution timeline. Check data format.")
         else:
             st.error("No data available. Please check data source and try again.")
     
