@@ -723,6 +723,7 @@ def main():
                 else:
                     st.warning("No data to display for the selected filters.")
                 # Show summary statistics with project information
+                # Data Summary and Project Performance sections
                 st.markdown("### Data Summary")
                 col1, col2, col3, col4 = st.columns(4)
                 
@@ -742,16 +743,12 @@ def main():
                     st.bar_chart(owner_counts)
                 
                 with col4:
-                with col4:
                     st.subheader("Success Rate")
-                    if 'success_rate' in processed_df.columns:
-                        avg_success = processed_df['success_rate'].mean()
-                        st.metric("Overall Success Rate", f"{avg_success:.1f}%")
-                    else:
-                        success_rate = processed_df['wassuccessful'].mean() * 100
-                        st.metric("Overall Success Rate", f"{success_rate:.1f}%")
-                
-                # Success rate by project with enhanced metrics - moved outside of col4
+                    success_rate = processed_df['wassuccessful'].mean() * 100
+                    st.metric("Overall Success Rate", f"{success_rate:.1f}%")
+
+                # Project Performance Metrics section
+                st.markdown("### Project Performance Metrics")
                 project_metrics = (processed_df.groupby('automation_project')
                     .agg({
                         'wassuccessful': ['count', 'mean'],
@@ -761,7 +758,7 @@ def main():
                     .round(4)
                 )
 
-                # Create multi-level column names
+                # Calculate metrics
                 project_metrics.columns = [
                     'Total Executions',
                     'Success Rate',
@@ -769,7 +766,6 @@ def main():
                     'Unique Flows'
                 ]
 
-                # Calculate metrics
                 project_metrics['Success Rate'] = project_metrics['Success Rate'] * 100
                 project_metrics['Failure Rate'] = project_metrics['Failure Rate'] * 100
                 project_metrics['Health Score'] = (
@@ -777,7 +773,8 @@ def main():
                     (project_metrics['Failure Rate'] * 2)
                 ).round(1)
 
-                # Create display dataframe with better formatting
+                # Create display dataframe
+                # Create display dataframe
                 success_display = pd.DataFrame({
                     'Project': project_metrics.index,
                     'Success Rate': project_metrics['Success Rate'].round(1),
@@ -787,8 +784,7 @@ def main():
                     'Health Score': project_metrics['Health Score']
                 })
 
-                # Display with better formatting
-                st.markdown("### Project Performance Metrics")
+                # Display metrics with enhanced formatting
                 st.dataframe(
                     success_display.sort_values('Health Score', ascending=False),
                     use_container_width=True,
@@ -823,8 +819,8 @@ def main():
                         )
                     }
                 )
-                st.markdown("### Additional Analytics")
                 
+                st.markdown("### Additional Analytics")
                 # 1. Performance Metrics
                 st.subheader("Performance Metrics")
                 metric_cols = st.columns(4)
