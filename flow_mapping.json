@@ -1,0 +1,892 @@
+{
+  "AMZ_SAFET_CLAIMS": {
+    "project": "Amazon SAFE-T Claims",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "AMZ_SAFET_CLAIMS_UOW": {
+    "project": "Amazon SAFE-T Claims",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "CreateBulkFile_Amazon_Listing_Health": {
+    "project": "Amazon Variations",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BulkInsert_AmazonHealthListingSQL_SVC01_v1": {
+    "project": "Amazon Variations",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Listings_P_VariationsStoredProcedureRefresh_SVC02_v1": {
+    "project": "Amazon Variations",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BulkInsert_AmazonHealthListing_SVC01_V1": {
+    "project": "Amazon Variations",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Finance_P_AnalyticIndexAutomation_SVC02_v1": {
+    "project": "Analytic Index",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Analytic_Index_UOW": {
+    "project": "Analytic Index",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Finance_P_AnalyticIndexAutomation_SVC02_v1 - Bulk": {
+    "project": "Analytic Index",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BusDev_HeliumExtract_SVC01_v1": {
+    "project": "Bullseye - Helium10 & Keepa",
+    "type": "Missing",
+    "uow_type": "UOW"
+  },
+  "BusDev_P_HeliumExtract_SVC01_v1": {
+    "project": "Bullseye - Helium10 & Keepa",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "BusDev_KeepaPull_SVC01_v1": {
+    "project": "Bullseye - Helium10 & Keepa",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "Bullseye - Helium10": {
+    "project": "Bullseye - Helium10 & Keepa",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "C2D_Amazon_Scrapping_UOW": {
+    "project": "C2D - Scrapped Delivery Dates",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Part 1 - Insert SQL - Amazon_Cust_Delivery_Time_V2": {
+    "project": "C2D - Scrapped Delivery Dates",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Part 2 - Scrape Data - Amazon_Cust_Delivery_Time": {
+    "project": "C2D - Scrapped Delivery Dates",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "Scrape Data - Amazon_Cust_Delivery_Time_V1": {
+    "project": "C2D - Scrapped Delivery Dates",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "Part 2 - BullsEye - Scrape Data - Amazon_Cust_Delivery_Time": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Missing",
+    "uow_type": "UOW"
+  },
+  "Part 1 - Insert SQL - Amazon_Cust_Delivery_Time": {
+    "project": "C2D - Scrapped Delivery Dates",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Part2-BullsEye-Scrape_Data-Amazon_Cust_Delivery_Time": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Part1-BullsEye-Insert_SQL-Amazon_Cust_Delivery_Time": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "Scrape Data - Amazon_Cust_Delivery_Time_Test": {
+    "project": "C2D - Scrapped Delivery Dates",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "Part 1 - Insert SQL - Amazon_Cust_Delivery_Time_Test": {
+    "project": "C2D - Scrapped Delivery Dates",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Part1 - BullsEye - Insert SQL - Amazon_Cust_Delivery_Time": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Missing",
+    "uow_type": "UOW"
+  },
+  "C2D_Amazon_Scrapping_BullsEye_UOW": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Hourly_Amazon_Upload": {
+    "project": "C2D - Seller Central - Manual Delivery Template Upload",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BusOps_P_ClearOverridesToolkit_SVC02_v1": {
+    "project": "Forecasting - Clear Override Demands",
+    "type": "Cloud",
+    "uow_type": "?"
+  },
+  "BusOps_P_ClearOverridesToolkit_SVC_v1": {
+    "project": "Forecasting - Clear Override Demands",
+    "type": "Desktop",
+    "uow_type": "?"
+  },
+  "BusOps_P_DemandOverridesToolkit_SVC_v1": {
+    "project": "Forecasting - Set Override Demands",
+    "type": "Desktop",
+    "uow_type": "?"
+  },
+  "Forecasting_Clear_Override_Demands_UOW": {
+    "project": "Forecasting - Clear Override Demands",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Forecasting_Set_Override_Demands_UOW": {
+    "project": "Forecasting - Set Override Demands",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "PE1 - VP - IAR Refresh Automation - Job #2 - Main IAR Query Refresh - v2": {
+    "project": "IAR - Invoice Action Report - Macro Processing",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "PE1 - VP - IAR Refresh Automation - V8 Master Refresh": {
+    "project": "IAR - Invoice Action Report - Macro Processing",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "FreightPay_P_PayportApprovalInv_SVC02_v1": {
+    "project": "Payport - Invoice Approvals",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Payport_Approval_UOW": {
+    "project": "Payport - Invoice Approvals",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "PE1 - SP - Completed PO Reporting Refresh - Desktop Job": {
+    "project": "PO Approvals - Jotform - Completed",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "PE1 - SP - Completed PO Reporting Refresh - Desktop Job V3": {
+    "project": "PO Approvals - Jotform - Completed",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "PE1 - SP - Jotform - Completed POs - NEW #1": {
+    "project": "PO Approvals - Jotform - Completed",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "PE1 - SP - Jotform - Completed POs - NEW #2": {
+    "project": "PO Approvals - Jotform - Completed",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "PE1 - SP - Jotform - Current POs #5 - OLD": {
+    "project": "PO Approvals - Jotform - Current",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "PE1 - SP - Jotform - Current POs #3": {
+    "project": "PO Approvals - Jotform - Current",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "PE1 - SP - Jotform - Current POs #5": {
+    "project": "PO Approvals - Jotform - Current",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "FPA_P_LoginToJotform_SVC03_v1": {
+    "project": "PO Approvals - Jotform - Current",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "PE1 - SP - Jotform - Current POs #4": {
+    "project": "PO Approvals - Jotform - Current",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BWE - Activate Listing- Big 4": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Content Conversion - Creative": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Launch DSV": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Content Conversion-Copy": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Review Toggle- DSV": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Review Toggle - Big 4": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Activate Listing - DSV": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Channels Pro Launch": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Approved BOAT Retail - Review IPR": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Needs BazaarVoice Channels Reviews Improvement": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Retail - Set Ideal Range": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Merge Reviews": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Launch DSV NEW": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Needs Walmart/Target Reviews Improvement": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Broken Variations": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Retail - Break MAP": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Video Needed on Listing": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Activate Listing - DSV - NEW": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Retail - Ideal Range - Price Flag": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Pricing Positions - Price Reviews": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Pricing Positions - Net Margin IPR Flag": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Qualify Advertising": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Suppression Notification": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Master Play Run Monday": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Master Play Run Friday": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Master Play Run Daily": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "BWE - Channels NISS": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Activate Listing - Amazon": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Activate Listing - Target": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Activate Listing - Walmart": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Activate Listing - Amazon CA": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Content Conversion-Creative": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "CreateBulkFile_SLQSReport": {
+    "project": "SLQS Download",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "suppressedTool_PowerBI_to_CSV_Live_SVC06": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Missing",
+    "uow_type": "Job"
+  },
+  "GetValidationPrice_From_GoogleShopping-V3": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "GetValidationPrice_From_GoogleShopping-V4": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Suppression Report - Comp Price": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "CreateBulkInsert-SuppressedTool": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Missing",
+    "uow_type": "Job"
+  },
+  "CreateBulkInsert-SuppressedTool-V2": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "CreateBulkInsert-SuppressedTool-V3": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "CreateBulkInsert-SuppressedTool-V4": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "UpdateComment_SuppressionReport": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "CreateBulkFile_SuppressedTool": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "CreateBulkInsert-SuppreseTool": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "GetValidationPrice_From_GoogleShopping": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BrandPayables_BrandReconSQLRefresh_SVC02_": {
+    "project": "VP Brand Reconciliation",
+    "type": "Missing",
+    "uow_type": "Job"
+  },
+  "Brand Recon - SQL Refresh": {
+    "project": "VP Brand Reconciliation",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "PS_FlowOrchestrator_PS_V1": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Weekly_WBR_UOW": {
+    "project": "Weekly WBR - Excel File Generation",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "AmazonBrand_KeywordSearch_SVC05_v1": {
+    "project": "Amazon ASIN Keyword Search Downloads -Brand Analytics",
+    "type": "Desktop",
+    "uow_type": "?"
+  },
+  "Amazon_ASIN_Keyword_Search_Downloads_UOW": {
+    "project": "Amazon ASIN Keyword Search Downloads -Brand Analytics",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "AmazonBrand_KeywordSearchDivideASINS_SVC05_01": {
+    "project": "Amazon ASIN Keyword Search Downloads -Brand Analytics",
+    "type": "Desktop",
+    "uow_type": "?"
+  },
+  "BrandPayables_BrandReconSQLRefresh_SVC02_V1": {
+    "project": "VP Brand Reconciliation",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Promotion Alerts": {
+    "project": "Amazon Daily Alerting",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Promotion Alerts 24hrs": {
+    "project": "Amazon Daily Alerting",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "GMV Sales Alert": {
+    "project": "Amazon Daily Alerting",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "C2D / OTD Alerting": {
+    "project": "Amazon Daily Alerting",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Premium Turned Off Alerting": {
+    "project": "Amazon Daily Alerting",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Pricing Alerts Canada": {
+    "project": "Pricing - Daily Alerts",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Pricing System Status": {
+    "project": "Pricing - Daily Alerts",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Promotion_Alert4": {
+    "project": "Amazon Daily Alerting",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Suppression_Action_PS": {
+    "project": "Amazon Suppression - Case Submissions",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Read CEVA Invoices": {
+    "project": "AI & Shipment Manager - Automated Approvals",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "SP_ALL_UOW": {
+    "project": "SP ALL Enhancement",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "BWE - Review Target IPR": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Delete_PS_Workflow": {
+    "project": "Create Process to Delete Workflows via API",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "BWE - Content Conversion - Copy Findability": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Content Conversion - Copy Findability Title": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Needs Customer Returns Improvement": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - DSV Cost Negotiations": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Drive Fidelity Amazon US": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Amazon Vine Review": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Liquidation Not Ordering": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "BWE - Liquidation Replenish": {
+    "project": "Process Street Cloud Flows - Orchestrator",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "ConvertedPriceAutomation_UOW": {
+    "project": "Canada Channels - Converted Price Automation",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Suppression_GPT_Image_Comparison_UOW": {
+    "project": "Suppression Report - Comp Price (GPT-API)  Ver2",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "BuyBoxWinner Automation": {
+    "project": "Spreetail Delivery - Buy Box Winner Scrape",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "NewWeekly_WBR_UOW": {
+    "project": "Weekly WBR - Excel File Generation",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "BullsEye - SQL Data Insertion V1": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "BullsEye Prime Scrape Amz Cust Delivey Time": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BullsEye Non Prime Amz Cust Delivery Date": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Excel_Generation_UOW": {
+    "project": "Automate Generating of Multiple Excel Files",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "RPA_IAR_Refresh_PS_UOW": {
+    "project": "Retire IAR & Create New PS Plays",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Promotions: NextOOSDate": {
+    "project": "Promotion Daily Queries & PS Plays",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Promotions - Portal Audit": {
+    "project": "Promotion Daily Queries & PS Plays",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Promotions - Greater than 14 Days Live": {
+    "project": "Promotion Daily Queries & PS Plays",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Promotions - Ready to Review Red Flags": {
+    "project": "Promotion Daily Queries & PS Plays",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Walmart Traffic File Upload": {
+    "project": "Walmart & Target Traffic Data - Manual Downloads",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Target Traffic File Upload": {
+    "project": "Walmart & Target Traffic Data - Manual Downloads",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "GetFinalReport_Suppression": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "GetValidationPrice_From_GoogleShopping-V4 - SVC05": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BullsEye-Non_Prime-Scrape_Data-Amz_Cust_Delivery_Time": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BullsEye Delivery data Scrape": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Invoice Research and Approval": {
+    "project": "Retire IAR & Create New PS Plays",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "PE1 - SP - Jotform - Current POs #5_30Sept2024": {
+    "project": "PO Approvals - Jotform - Current",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "2_BullsEye-Scrapping-Amazon_Cust_Delivery_Date": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "BullsEye Prime Scrape Amz Cust Delivery Time": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Time Zone  - IAR Refresh  PS V2": {
+    "project": "Retire IAR & Create New PS Plays",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Scrape Data - Buy Box Winner Amazon Scrape": {
+    "project": "Spreetail Delivery - Buy Box Winner Scrape",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Insert SQL - Buy Box Winner Amazon Scrape": {
+    "project": "Spreetail Delivery - Buy Box Winner Scrape",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Suppression Report - Case Number": {
+    "project": "Amazon Suppression - Case Submissions",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Buy Box Winner C2D Scrape": {
+    "project": "Spreetail Delivery - Buy Box Winner Scrape",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "BullsEye-Prime-C2D-Run by Queue": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "BullsEye-Non_Prime-C2D-Run by Queue": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "GetValidationPrice_From_GoogleShopping-V5": {
+    "project": "Suppression Report - Comp Price",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Suppression Validation by API": {
+    "project": "Suppression Report - Comp Price (GPT-API)  Ver2",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Generate Case to Amazon": {
+    "project": "Amazon Suppression - Case Submissions",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Shipping Template Amazon Two Day": {
+    "project": "C2D - Automate Template Builds",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Shipping Template Amazon One Day": {
+    "project": "C2D - Automate Template Builds",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Shipping Template Amazon Standard": {
+    "project": "C2D - Automate Template Builds",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Advertising_Manager_PS": {
+    "project": "Advertising Process Street - New BWE Flows",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Advertising_Specialist_PS": {
+    "project": "Advertising Process Street - New BWE Flows",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "Advertising_Manager_Weekly_Optimize_PS": {
+    "project": "Advertising Process Street - New BWE Flows",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "UploadAmazonPromotions_UOW": {
+    "project": "Upload Amazon Promotions",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "C2D PlatformService Prime - Queue": {
+    "project": "C2D - Scrapped Delivery Dates - Platform Services",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "C2D PlatformService Non-Prime - Queue": {
+    "project": "C2D - Scrapped Delivery Dates - Platform Services",
+    "type": "Cloud",
+    "uow_type": "UOW"
+  },
+  "PlatformService-Prime-C2D-Run by Queue": {
+    "project": "C2D - Scrapped Delivery Dates - Platform Services",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "PlatformService-Non_Prime-C2D-Run by Queue": {
+    "project": "C2D - Scrapped Delivery Dates - Platform Services",
+    "type": "Desktop",
+    "uow_type": "UOW"
+  },
+  "C2D_Amazon_Scrapping_PlatformService_UOW": {
+    "project": "C2D - Scrapped Delivery Dates - Platform Services",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Bullseye SQL Insertion Child": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "C2D BullsEye Prime - Queue": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "C2D BullsEye Non-Prime - Queue": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Bullseye SQL Insertion Parent": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Bullseye Queue Runner": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Amazon Cust Delivery Date Scrapping": {
+    "project": "C2D - Scrapped Delivery Dates",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "BullsEye-Prime-Scrape_Data-Amazon_Cust_Delivery_Time": {
+    "project": "C2D - Scrapped Delivery Dates - Bullseye Edition",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "Dummy - Insert SQL - Amazon_Cust_Delivery_Time": {
+    "project": "C2D - Scrapped Delivery Dates",
+    "type": "Desktop",
+    "uow_type": "Job"
+  },
+  "C2D Amazon Promotion Price": {
+    "project": "C2D Amazon Promotion Price",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Amazon Scrape Promotion Price": {
+    "project": "C2D Amazon Promotion Price",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "Amazon List Price Scraping": {
+    "project": "Amazon List Price Scraping",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Century File Drop - Purchase Order Data": {
+    "project": "CDS SFTP Setup",
+    "type": "Cloud",
+    "uow_type": "Job"
+  },
+  "FedEx_Resubmissions": {
+    "project": "FedEx Dispute Resubmission",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "RevLog Submissions": {
+    "project": "SAFE-T Claims Photo Category",
+    "type": "UOW",
+    "uow_type": "UOW"
+  },
+  "Insert SQL - Amazon Listing Price Scrape": {
+    "project": "Amazon List Price Scraping",
+    "type": "Cloud",
+    "uow_type": "Job"
+  }
+}
