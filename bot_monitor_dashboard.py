@@ -661,20 +661,39 @@ def main():
                     selected_owner = st.selectbox("Select Owner", owners)
                     
                 # Apply filters
-                if selected_project != 'All Projects':
-                    processed_df = processed_df[processed_df['automation_project'] == selected_project]
-                if selected_status != 'All Statuses':
-                    processed_df = processed_df[processed_df['taskstatus'] == selected_status]
-                if selected_owner != 'All Owners':
-                    processed_df = processed_df[processed_df['owner'] == selected_owner]
+                # Apply filters before any metrics calculation
+                mask = pd.Series(True, index=processed_df.index)
                 
-                # Create matrix data with proper display names
+                # Project filter
+                if selected_project != 'All Projects':
+                    mask &= (processed_df['automation_project'] == selected_project)
+                    logger.info(f"Filtered for project: {selected_project}, remaining records: {mask.sum()}")
+                    
+                # Status filter
+                if selected_status != 'All Statuses':
+                    mask &= (processed_df['taskstatus'] == selected_status)
+                    logger.info(f"Filtered for status: {selected_status}, remaining records: {mask.sum()}")
+                    
+                # Owner filter
+                if selected_owner != 'All Owners':
+                    mask &= (processed_df['owner'] == selected_owner)
+                    logger.info(f"Filtered for owner: {selected_owner}, remaining records: {mask.sum()}")
+
+                # Apply the filter mask to create filtered dataframe
+                filtered_metrics_df = processed_df[mask].copy()
+                logger.info(f"After all filters: {len(filtered_metrics_df)} records")
+
+                # Ensure we have data after filtering
+                if filtered_metrics_df.empty:
+                    st.warning("No data available for the selected filters.")
+                    return
+
+                # Create matrix data with filtered data
                 bot_hour_status, display_names, hours = create_hourly_matrix(
-                    processed_df,
+                    filtered_metrics_df,
                     selected_project=selected_project,
                     selected_status=selected_status
                 )
-                
                 
                 logger.info(f"Matrix created with {len(display_names)} display names and {len(hours)} hours")
                 
@@ -729,27 +748,27 @@ def main():
                 
                 with col1:
                     st.subheader("Status Distribution")
-                    status_counts = processed_df['taskstatus'].value_counts()
+                    status_counts = filtered_metrics_df['taskstatus'].value_counts()
                     st.bar_chart(status_counts)
                 
                 with col2:
                     st.subheader("Automation Projects")
-                    project_counts = processed_df['automation_project'].value_counts().head(10)
+                    project_counts = filtered_metrics_df['automation_project'].value_counts().head(10)
                     st.bar_chart(project_counts)
                 
                 with col3:
                     st.subheader("Owner Distribution")
-                    owner_counts = processed_df['owner'].value_counts()
+                    owner_counts = filtered_metrics_df['owner'].value_counts()
                     st.bar_chart(owner_counts)
                 
                 with col4:
                     st.subheader("Success Rate")
-                    success_rate = processed_df['wassuccessful'].mean() * 100
+                    success_rate = filtered_metrics_df['wassuccessful'].mean() * 100
                     st.metric("Overall Success Rate", f"{success_rate:.1f}%")
 
                 # Project Performance Metrics section
                 st.markdown("### Project Performance Metrics")
-                project_metrics = (processed_df.groupby('automation_project')
+                project_metrics = (filtered_metrics_df.groupby('automation_project')
                     .agg({
                         'wassuccessful': ['count', 'mean'],
                         'taskstatus': lambda x: (x == 'Failed').mean(),
@@ -822,27 +841,28 @@ def main():
                 
                 st.markdown("### Additional Analytics")
                 # 1. Performance Metrics
+                # 1. Performance Metrics
                 st.subheader("Performance Metrics")
                 metric_cols = st.columns(4)
                 
                 with metric_cols[0]:
                     try:
-                        avg_duration = processed_df['datetimecompleted'].dt.timestamp() - processed_df['datetimestarted'].dt.timestamp()
+                        avg_duration = filtered_metrics_df['datetimecompleted'].dt.timestamp() - filtered_metrics_df['datetimestarted'].dt.timestamp()
                         avg_duration_mins = avg_duration.mean() / 60
                         st.metric("Average Duration", f"{avg_duration_mins:.1f} mins")
                     except:
                         st.metric("Average Duration", "N/A")
                 
                 with metric_cols[1]:
-                    failure_rate = (processed_df['taskstatus'] == 'Failed').mean() * 100
+                    failure_rate = (filtered_metrics_df['taskstatus'] == 'Failed').mean() * 100
                     st.metric("Failure Rate", f"{failure_rate:.1f}%")
                 
                 with metric_cols[2]:
-                    total_runs = len(processed_df)
+                    total_runs = len(filtered_metrics_df)
                     st.metric("Total Executions", f"{total_runs:,}")
                 
                 with metric_cols[3]:
-                    active_flows = processed_df['flowname'].nunique()
+                    active_flows = filtered_metrics_df['flowname'].nunique()
                     st.metric("Active Flows", f"{active_flows:,}")
 
                 # 2. Hourly Trends
@@ -851,12 +871,12 @@ def main():
                 
                 with trend_cols[0]:
                     st.markdown("#### Hourly Distribution")
-                    hourly_dist = processed_df.groupby(processed_df['datetimestarted'].dt.hour)['flowname'].count()
+                    hourly_dist = filtered_metrics_df.groupby(filtered_metrics_df['datetimestarted'].dt.hour)['flowname'].count()
                     st.bar_chart(hourly_dist)
                 
                 with trend_cols[1]:
                     st.markdown("#### Success Rate by Hour")
-                    hourly_success = processed_df.groupby(processed_df['datetimestarted'].dt.hour)['wassuccessful'].mean() * 100
+                    hourly_success = filtered_metrics_df.groupby(filtered_metrics_df['datetimestarted'].dt.hour)['wassuccessful'].mean() * 100
                     st.line_chart(hourly_success)
 
                 # 3. Top Issues Analysis
@@ -865,7 +885,7 @@ def main():
                 
                 with issue_cols[0]:
                     st.markdown("#### Top Failing Flows")
-                    failed_df = processed_df[processed_df['taskstatus'] == 'Failed']
+                    failed_df = filtered_metrics_df[filtered_metrics_df['taskstatus'] == 'Failed']
                     if not failed_df.empty:
                         failed_flows = (failed_df
                                       .groupby('flowname')
@@ -878,7 +898,7 @@ def main():
                 
                 with issue_cols[1]:
                     st.markdown("#### Project Health Score")
-                    project_health = (processed_df.groupby('automation_project')
+                    project_health = (filtered_metrics_df.groupby('automation_project')
                                     .agg({
                                         'wassuccessful': 'mean',
                                         'taskstatus': lambda x: (x == 'Failed').mean()
@@ -890,7 +910,7 @@ def main():
                 # 4. Execution Timeline
                 st.subheader("Execution Timeline")
                 try:
-                    timeline_data = (processed_df.groupby(pd.Grouper(key='datetimestarted', freq='15T'))
+                    timeline_data = (filtered_metrics_df.groupby(pd.Grouper(key='datetimestarted', freq='15T'))
                                    .agg({
                                        'flowname': 'count',
                                        'wassuccessful': 'mean'

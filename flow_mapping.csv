@@ -1,0 +1,179 @@
+FlowName,Project,Owner,Type,UOW_Type
+amz_safet_claims,Amazon SAFE-T Claims,Edu Cielo,Desktop,UOW
+amz_safet_claims_uow,Amazon SAFE-T Claims,Edu Cielo,UOW,UOW
+createbulkfile_amazon_listing_health,Amazon Variations,Mohammad Asim,Desktop,Job
+bulkinsert_amazonhealthlistingsql_svc01_v1,Amazon Variations,Mohammad Asim,Desktop,Job
+listings_p_variationsstoredprocedurerefresh_svc02_v1,Amazon Variations,Mohammad Asim,Desktop,Job
+bulkinsert_amazonhealthlisting_svc01_v1,Amazon Variations,Mohammad Asim,Desktop,Job
+finance_p_analyticindexautomation_svc02_v1,Analytic Index,Cheddrick Bagunu,Desktop,Job
+analytic_index_uow,Analytic Index,Cheddrick Bagunu,UOW,UOW
+finance_p_analyticindexautomation_svc02_v1 - bulk,Analytic Index,Cheddrick Bagunu,Desktop,Job
+busdev_heliumextract_svc01_v1,Bullseye - Helium10 & Keepa,Cheddrick Bagunu,Missing,UOW
+busdev_p_heliumextract_svc01_v1,Bullseye - Helium10 & Keepa,Cheddrick Bagunu,Desktop,UOW
+busdev_keepapull_svc01_v1,Bullseye - Helium10 & Keepa,Cheddrick Bagunu,Desktop,UOW
+bullseye - helium10,Bullseye - Helium10 & Keepa,Cheddrick Bagunu,UOW,UOW
+c2d_amazon_scrapping_uow,C2D - Scrapped Delivery Dates,Mohammad Asim,UOW,UOW
+part 1 - insert sql - amazon_cust_delivery_time_v2,C2D - Scrapped Delivery Dates,Mohammad Asim,Desktop,Job
+part 2 - scrape data - amazon_cust_delivery_time,C2D - Scrapped Delivery Dates,Mohammad Asim,Desktop,UOW
+scrape data - amazon_cust_delivery_time_v1,C2D - Scrapped Delivery Dates,Mohammad Asim,Desktop,UOW
+part 2 - bullseye - scrape data - amazon_cust_delivery_time,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Missing,UOW
+part 1 - insert sql - amazon_cust_delivery_time,C2D - Scrapped Delivery Dates,Mohammad Asim,Desktop,Job
+part2-bullseye-scrape_data-amazon_cust_delivery_time,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,Job
+part1-bullseye-insert_sql-amazon_cust_delivery_time,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,UOW
+scrape data - amazon_cust_delivery_time_test,C2D - Scrapped Delivery Dates,Mohammad Asim,Desktop,UOW
+part 1 - insert sql - amazon_cust_delivery_time_test,C2D - Scrapped Delivery Dates,Mohammad Asim,Desktop,Job
+part1 - bullseye - insert sql - amazon_cust_delivery_time,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Missing,UOW
+c2d_amazon_scrapping_bullseye_uow,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Cloud,UOW
+hourly_amazon_upload,C2D - Seller Central - Manual Delivery Template Upload,Mohammad Asim,Desktop,Job
+busops_p_clearoverridestoolkit_svc02_v1,Forecasting - Clear Override Demands,Cheddrick Bagunu,Cloud,?
+busops_p_clearoverridestoolkit_svc_v1,Forecasting - Clear Override Demands,Cheddrick Bagunu,Desktop,?
+busops_p_demandoverridestoolkit_svc_v1,Forecasting - Set Override Demands,Cheddrick Bagunu,Desktop,?
+forecasting_clear_override_demands_uow,Forecasting - Clear Override Demands,Cheddrick Bagunu,UOW,UOW
+forecasting_set_override_demands_uow,Forecasting - Set Override Demands,Cheddrick Bagunu,UOW,UOW
+pe1 - vp - iar refresh automation - job #2 - main iar query refresh - v2,IAR - Invoice Action Report - Macro Processing,Mohammad Asim,Desktop,Job
+pe1 - vp - iar refresh automation - v8 master refresh,IAR - Invoice Action Report - Macro Processing,Mohammad Asim,Desktop,Job
+freightpay_p_payportapprovalinv_svc02_v1,Payport - Invoice Approvals,Cheddrick Bagunu,Desktop,Job
+payport_approval_uow,Payport - Invoice Approvals,Cheddrick Bagunu,UOW,UOW
+pe1 - sp - completed po reporting refresh - desktop job,PO Approvals - Jotform - Completed,Mohammad Asim,Desktop,Job
+pe1 - sp - completed po reporting refresh - desktop job v3,PO Approvals - Jotform - Completed,Mohammad Asim,Desktop,Job
+pe1 - sp - jotform - completed pos - new #1,PO Approvals - Jotform - Completed,Mohammad Asim,Desktop,Job
+pe1 - sp - jotform - completed pos - new #2,PO Approvals - Jotform - Completed,Mohammad Asim,Desktop,Job
+pe1 - sp - jotform - current pos #5 - old,PO Approvals - Jotform - Current,Mohammad Asim,Desktop,Job
+pe1 - sp - jotform - current pos #3,PO Approvals - Jotform - Current,Mohammad Asim,Desktop,Job
+pe1 - sp - jotform - current pos #5,PO Approvals - Jotform - Current,Mohammad Asim,Desktop,Job
+fpa_p_logintojotform_svc03_v1,PO Approvals - Jotform - Current,Mohammad Asim,Desktop,Job
+pe1 - sp - jotform - current pos #4,PO Approvals - Jotform - Current,Mohammad Asim,Desktop,Job
+bwe - activate listing- big 4,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - content conversion - creative,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - launch dsv,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - content conversion-copy,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - review toggle- dsv,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - review toggle - big 4,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - activate listing - dsv,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - channels pro launch,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - approved boat retail - review ipr,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - needs bazaarvoice channels reviews improvement,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - retail - set ideal range,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - merge reviews,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - launch dsv new,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - needs walmart/target reviews improvement,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - broken variations,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - retail - break map,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - video needed on listing,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - activate listing - dsv - new,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - retail - ideal range - price flag,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - pricing positions - price reviews,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - pricing positions - net margin ipr flag,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - qualify advertising,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+suppression notification,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+master play run monday,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,Job
+master play run friday,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,Job
+master play run daily,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,Job
+bwe - channels niss,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - activate listing - amazon,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - activate listing - target,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - activate listing - walmart,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - activate listing - amazon ca,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+content conversion-creative,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+createbulkfile_slqsreport,SLQS Download,Mohammad Asim,Desktop,Job
+suppressedtool_powerbi_to_csv_live_svc06,Suppression Report - Comp Price,Mohammad Asim,Missing,Job
+getvalidationprice_from_googleshopping-v3,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+getvalidationprice_from_googleshopping-v4,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+suppression report - comp price,Suppression Report - Comp Price,Mohammad Asim,Desktop,UOW
+createbulkinsert-suppressedtool,Suppression Report - Comp Price,Mohammad Asim,Missing,Job
+createbulkinsert-suppressedtool-v2,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+createbulkinsert-suppressedtool-v3,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+createbulkinsert-suppressedtool-v4,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+updatecomment_suppressionreport,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+createbulkfile_suppressedtool,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+createbulkinsert-suppresetool,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+getvalidationprice_from_googleshopping,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+brandpayables_brandreconsqlrefresh_svc02_,VP Brand Reconciliation,Cheddrick Bagunu,Missing,Job
+brand recon - sql refresh,VP Brand Reconciliation,Cheddrick Bagunu,Desktop,Job
+ps_floworchestrator_ps_v1,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,Job
+weekly_wbr_uow,Weekly WBR - Excel File Generation,Cheddrick Bagunu,UOW,UOW
+amazonbrand_keywordsearch_svc05_v1,Amazon ASIN Keyword Search Downloads -Brand Analytics,Cheddrick Bagunu,Desktop,?
+amazon_asin_keyword_search_downloads_uow,Amazon ASIN Keyword Search Downloads -Brand Analytics,Cheddrick Bagunu,UOW,UOW
+amazonbrand_keywordsearchdivideasins_svc05_01,Amazon ASIN Keyword Search Downloads -Brand Analytics,Cheddrick Bagunu,Desktop,?
+brandpayables_brandreconsqlrefresh_svc02_v1,VP Brand Reconciliation,Cheddrick Bagunu,Cloud,Job
+promotion alerts,Amazon Daily Alerting,Mohammad Asim,Cloud,Job
+promotion alerts 24hrs,Amazon Daily Alerting,Mohammad Asim,Cloud,Job
+gmv sales alert,Amazon Daily Alerting,Mohammad Asim,Cloud,Job
+c2d / otd alerting,Amazon Daily Alerting,Mohammad Asim,Cloud,Job
+premium turned off alerting,Amazon Daily Alerting,Mohammad Asim,Cloud,Job
+pricing alerts canada,Pricing - Daily Alerts,Edu Cielo,Cloud,Job
+pricing system status,Pricing - Daily Alerts,Edu Cielo,Cloud,Job
+promotion_alert4,Amazon Daily Alerting,Mohammad Asim,Cloud,Job
+suppression_action_ps,Amazon Suppression - Case Submissions,Mohammad Asim,UOW,UOW
+read ceva invoices,AI & Shipment Manager - Automated Approvals,Edu Cielo,Cloud,UOW
+sp_all_uow,SP ALL Enhancement,Cheddrick Bagunu,UOW,UOW
+bwe - review target ipr,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+delete_ps_workflow,Create Process to Delete Workflows via API,Mohammad Asim,UOW,UOW
+bwe - content conversion - copy findability,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - content conversion - copy findability title,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - needs customer returns improvement,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - dsv cost negotiations,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - drive fidelity amazon us,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - amazon vine review,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - liquidation not ordering,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+bwe - liquidation replenish,Process Street Cloud Flows - Orchestrator,Edu Cielo,Cloud,UOW
+convertedpriceautomation_uow,Canada Channels - Converted Price Automation,Cheddrick Bagunu,UOW,UOW
+suppression_gpt_image_comparison_uow,Suppression Report - Comp Price (GPT-API)  Ver2,Mohammad Asim,UOW,UOW
+buyboxwinner automation,Spreetail Delivery - Buy Box Winner Scrape,Mohammad Asim,UOW,UOW
+newweekly_wbr_uow,Weekly WBR - Excel File Generation,Cheddrick Bagunu,UOW,UOW
+bullseye - sql data insertion v1,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,UOW
+bullseye prime scrape amz cust delivey time,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,Job
+bullseye non prime amz cust delivery date,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,Job
+excel_generation_uow,Automate Generating of Multiple Excel Files,Cheddrick Bagunu,Cloud,UOW
+rpa_iar_refresh_ps_uow,Retire IAR & Create New PS Plays,Mohammad Asim,UOW,UOW
+promotions: nextoosdate,Promotion Daily Queries & PS Plays,Edu Cielo,Cloud,UOW
+promotions - portal audit,Promotion Daily Queries & PS Plays,Edu Cielo,Cloud,UOW
+promotions - greater than 14 days live,Promotion Daily Queries & PS Plays,Edu Cielo,Cloud,UOW
+promotions - ready to review red flags,Promotion Daily Queries & PS Plays,Edu Cielo,Cloud,UOW
+walmart traffic file upload,Walmart & Target Traffic Data - Manual Downloads,Edu Cielo,Desktop,Job
+target traffic file upload,Walmart & Target Traffic Data - Manual Downloads,Edu Cielo,Cloud,UOW
+getfinalreport_suppression,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+getvalidationprice_from_googleshopping-v4 - svc05,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+bullseye-non_prime-scrape_data-amz_cust_delivery_time,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,Job
+bullseye delivery data scrape,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,Job
+invoice research and approval,Retire IAR & Create New PS Plays,Mohammad Asim,Cloud,Job
+pe1 - sp - jotform - current pos #5_30sept2024,PO Approvals - Jotform - Current,Mohammad Asim,Desktop,Job
+2_bullseye-scrapping-amazon_cust_delivery_date,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Cloud,Job
+bullseye prime scrape amz cust delivery time,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,Job
+time zone  - iar refresh  ps v2,Retire IAR & Create New PS Plays,Mohammad Asim,Cloud,Job
+scrape data - buy box winner amazon scrape,Spreetail Delivery - Buy Box Winner Scrape,Mohammad Asim,Desktop,Job
+insert sql - buy box winner amazon scrape,Spreetail Delivery - Buy Box Winner Scrape,Mohammad Asim,Desktop,Job
+suppression report - case number,Amazon Suppression - Case Submissions,Mohammad Asim,Cloud,Job
+buy box winner c2d scrape,Spreetail Delivery - Buy Box Winner Scrape,Mohammad Asim,Cloud,Job
+bullseye-prime-c2d-run by queue,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,Job
+bullseye-non_prime-c2d-run by queue,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,Job
+getvalidationprice_from_googleshopping-v5,Suppression Report - Comp Price,Mohammad Asim,Desktop,Job
+suppression validation by api,Suppression Report - Comp Price (GPT-API)  Ver2,Mohammad Asim,Desktop,Job
+generate case to amazon,Amazon Suppression - Case Submissions,Mohammad Asim,Desktop,Job
+shipping template amazon two day,C2D - Automate Template Builds,Mohammad Asim,Desktop,Job
+shipping template amazon one day,C2D - Automate Template Builds,Mohammad Asim,Desktop,Job
+shipping template amazon standard,C2D - Automate Template Builds,Mohammad Asim,Desktop,Job
+advertising_manager_ps,Advertising Process Street - New BWE Flows,Mohammad Asim,Cloud,UOW
+advertising_specialist_ps,Advertising Process Street - New BWE Flows,Mohammad Asim,Cloud,UOW
+advertising_manager_weekly_optimize_ps,Advertising Process Street - New BWE Flows,Mohammad Asim,Cloud,UOW
+uploadamazonpromotions_uow,Upload Amazon Promotions,Cheddrick Bagunu,UOW,UOW
+c2d platformservice prime - queue,C2D - Scrapped Delivery Dates - Platform Services,Mohammad Asim,Cloud,UOW
+c2d platformservice non-prime - queue,C2D - Scrapped Delivery Dates - Platform Services,Mohammad Asim,Cloud,UOW
+platformservice-prime-c2d-run by queue,C2D - Scrapped Delivery Dates - Platform Services,Mohammad Asim,Desktop,UOW
+platformservice-non_prime-c2d-run by queue,C2D - Scrapped Delivery Dates - Platform Services,Mohammad Asim,Desktop,UOW
+c2d_amazon_scrapping_platformservice_uow,C2D - Scrapped Delivery Dates - Platform Services,Mohammad Asim,UOW,UOW
+bullseye sql insertion child,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Cloud,Job
+c2d bullseye prime - queue,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Cloud,Job
+c2d bullseye non-prime - queue,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Cloud,Job
+bullseye sql insertion parent,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Cloud,Job
+bullseye queue runner,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Cloud,Job
+amazon cust delivery date scrapping,C2D - Scrapped Delivery Dates,Mohammad Asim,Cloud,Job
+bullseye-prime-scrape_data-amazon_cust_delivery_time,C2D - Scrapped Delivery Dates - Bullseye Edition,Mohammad Asim,Desktop,Job
+dummy - insert sql - amazon_cust_delivery_time,C2D - Scrapped Delivery Dates,Mohammad Asim,Desktop,Job
+c2d amazon promotion price,C2D Amazon Promotion Price,Mohammad Asim,UOW,UOW
+amazon scrape promotion price,C2D Amazon Promotion Price,Mohammad Asim,Cloud,Job
+amazon list price scraping,Amazon List Price Scraping,Mohammad Asim,UOW,UOW
+century file drop - purchase order data,CDS SFTP Setup,Mohammad Asim,Cloud,Job
+fedex_resubmissions,FedEx Dispute Resubmission,Cheddrick Bagunu,UOW,UOW
+revlog submissions,SAFE-T Claims Photo Category,Edu Cielo,UOW,UOW
+insert sql - amazon listing price scrape,Amazon List Price Scraping,Mohammad Asim,Cloud,Job
