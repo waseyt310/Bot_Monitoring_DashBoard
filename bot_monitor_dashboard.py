@@ -333,21 +333,27 @@ def load_data(use_csv=False):
         if df is None or df.empty:
             status_placeholder.error("No data available. Please check data source.")
             progress_bar.empty()
-            return None
+            return None, None
             
+        # Convert datetimestarted to datetime if it's not already
+        df['datetimestarted'] = pd.to_datetime(df['datetimestarted'])
+        
+        # Get the latest date
+        latest_date = df['datetimestarted'].dt.date.max()
+        
         # Update progress
         progress_bar.progress(100)
         status_placeholder.empty()
         
-        logger.info(f"Data loaded successfully with {len(df)} records")
-        return df
+        logger.info(f"Data loaded successfully with {len(df)} records. Latest date: {latest_date}")
+        return df, latest_date
         
     except Exception as e:
         logger.error(f"Error loading data: {e}")
         st.error(f"Failed to load data: {str(e)}")
-        return None
+        return None, None
 
-def filter_data_by_date(df, selected_date):
+def filter_data_by_date(df, selected_date, use_latest=False):
     """Filter data for specific date"""
     if df is None or df.empty:
         return pd.DataFrame()
@@ -357,14 +363,18 @@ def filter_data_by_date(df, selected_date):
         if 'datetimestarted' not in df.columns:
             logger.error("datetimestarted column not found in DataFrame")
             return pd.DataFrame()
-            
-        # Convert selected_date to date object if needed
-        if isinstance(selected_date, datetime):
-            filter_date = selected_date.date()
-        elif isinstance(selected_date, str):
-            filter_date = pd.to_datetime(selected_date).date()
+        
+        # Get the latest date from the data if use_latest is True
+        if use_latest:
+            filter_date = pd.to_datetime(df['datetimestarted']).dt.date.max()
         else:
-            filter_date = selected_date
+            # Convert selected_date to date object if needed
+            if isinstance(selected_date, datetime):
+                filter_date = selected_date.date()
+            elif isinstance(selected_date, str):
+                filter_date = pd.to_datetime(selected_date).date()
+            else:
+                filter_date = selected_date
             
         logger.info(f"Filtering data for date: {filter_date}")
         
@@ -442,15 +452,33 @@ def main():
             use_csv = st.checkbox("Use CSV Data", value=False, 
                                  help="Use CSV files instead of database")
             
+            # Load data first to get the latest date
+            df, latest_date = load_data(use_csv=use_csv)
+            
+            # Date selection controls
+            st.markdown("### Date Selection")
+            use_latest = st.checkbox("Show Latest Data", value=True,
+                                   help="Automatically show data from the most recent date")
+            
             # Date selection
             today = date.today()
-            selected_date = st.date_input(
-                "Select Date", 
-                value=today,
-                min_value=today - timedelta(days=30),
-                max_value=today,
-                help="Select date to view"
-            )
+            min_date = today - timedelta(days=30)
+            
+            # Set the default date to latest_date if available, otherwise today
+            default_date = latest_date if latest_date else today
+            
+            # Only show date picker if not using latest date
+            if not use_latest:
+                selected_date = st.date_input(
+                    "Select Date", 
+                    value=default_date,
+                    min_value=min_date,
+                    max_value=today,
+                    help="Select date to view"
+                )
+            else:
+                selected_date = latest_date if latest_date else today
+                st.info(f"Showing data for: {selected_date}")
             
             # Manual refresh button with counter update
             if st.button("Refresh Data"):
@@ -524,12 +552,10 @@ def main():
                     logger.error(f"Auto-refresh calculation error: {refresh_error}")
                     st.warning("Error in refresh calculation. Try refreshing manually.")
         
-        # Load data
-        df = load_data(use_csv=use_csv)
-        
+        # Use the already loaded data from the sidebar
         if df is not None and not df.empty:
             # Filter data for selected date
-            filtered_df = filter_data_by_date(df, selected_date)
+            filtered_df = filter_data_by_date(df, selected_date, use_latest)
             
             if filtered_df.empty:
                 st.warning(f"No data available for selected date: {selected_date}")
