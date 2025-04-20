@@ -631,7 +631,9 @@ def main():
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
-                    projects = ['All Projects'] + sorted(processed_df['automation_project'].unique().tolist())
+                    all_projects = sorted(processed_df['automation_project'].unique().tolist())
+                    specific_projects = [p for p in all_projects if p != 'Other Cloud Flow']
+                    projects = ['All Projects'] + specific_projects + (['Other Cloud Flow'] if 'Other Cloud Flow' in all_projects else [])
                     selected_project = st.selectbox("Select Project", projects)
 
                 with col2:
@@ -684,15 +686,15 @@ def main():
                 st.markdown('<div class="status-legend">', unsafe_allow_html=True)
                 legend_cols = st.columns(5)
                 with legend_cols[0]:
-                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Succeeded"]} **Succeeded/Completed**</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Succeeded"]} Succeeded/Completed</div>', unsafe_allow_html=True)
                 with legend_cols[1]:
-                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Failed"]} **Failed/Error**</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Failed"]} Failed/Error</div>', unsafe_allow_html=True)
                 with legend_cols[2]:
-                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Running"]} **Running/In Progress**</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Running"]} Running/In Progress</div>', unsafe_allow_html=True)
                 with legend_cols[3]:
-                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["No Run"]} **No Run/Skipped**</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["No Run"]} No Run/Skipped</div>', unsafe_allow_html=True)
                 with legend_cols[4]:
-                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Canceled"]} **Canceled**</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="legend-item">{STATUS_EMOJIS["Canceled"]} Canceled</div>', unsafe_allow_html=True)
                 st.markdown('</div>', unsafe_allow_html=True)
 
                 # Add spacing after legend
@@ -733,15 +735,40 @@ def main():
                         st.metric("Overall Success Rate", f"{success_rate:.1f}%")
                     
                     # Success rate by project
-                    project_success = processed_df.groupby('automation_project')['wassuccessful'].mean() * 100
+                    # Success rate by project with better formatting
+                    project_success = (processed_df.groupby('automation_project')
+                        .agg({
+                            'wassuccessful': 'mean',
+                            'flowname': 'count'
+                        })
+                        .assign(
+                            success_rate=lambda x: x['wassuccessful'] * 100,
+                            flow_count=lambda x: x['flowname']
+                        )
+                        .sort_values('success_rate', ascending=False)
+                    )
+
                     st.markdown("#### Success Rate by Project")
-                    # Add sorting and formatting
-                    project_success_df = (project_success
-                        .sort_values(ascending=False)
-                        .round(1)
-                        .to_frame('Success Rate %'))
-                    st.dataframe(project_success_df, use_container_width=True)
-                    
+                    # Create a formatted dataframe for display
+                    success_display = pd.DataFrame({
+                        'Project': project_success.index,
+                        'Success Rate (%)': project_success['success_rate'].round(1),
+                        'Flow Count': project_success['flow_count']
+                    })
+                    st.dataframe(
+                        success_display,
+                        use_container_width=True,
+                        hide_index=True,
+                        column_config={
+                            'Success Rate (%)': st.column_config.NumberColumn(
+                                format="%.1f%%",
+                                help="Average success rate for the project"
+                            ),
+                            'Flow Count': st.column_config.NumberColumn(
+                                help="Number of flows in the project"
+                            )
+                        }
+                    )
                 # New Analytics Section
                 st.markdown("### Additional Analytics")
                 
