@@ -396,36 +396,40 @@ def filter_data_by_date(df, selected_date, use_latest=False):
 def create_flow_mapper():
     """Create a mapping between flows and their projects"""
     try:
-        # Read the Unique Projects sheet for mapping
-        df_mapping = pd.read_excel('Automation LTR.xlsx', sheet_name='Unique Projects')
-        header_row = df_mapping[df_mapping['Unnamed: 0'] == 'Automation Project Name'].index[0]
-        mapping_df = df_mapping.iloc[header_row + 1:].copy()
-        mapping_df.columns = df_mapping.iloc[header_row]
+        # Try to load from JSON first
+        with open('flow_mapping.json', 'r') as f:
+            flow_mapping = json.load(f)
+            
+        # Convert to DataFrame format
+        mapping_data = []
+        for flow_name, info in flow_mapping.items():
+            mapping_data.append({
+                'FlowName': flow_name.lower(),
+                'Project': info['project'],
+                'Type': info['type'],
+                'UOW_Type': info['uow_type'],
+                'Owner': info.get('owner', 'Unassigned')  # Maintain backwards compatibility
+            })
         
-        # Create mapping dictionary
-        flow_mapping = {}
-        for _, row in mapping_df.iterrows():
-            if pd.notna(row['FlowName']):
-                flow_mapping[str(row['FlowName']).strip().lower()] = {
-                    'project': str(row['Automation Project Name']),
-                    'owner': str(row['Owner']) if pd.notna(row['Owner']) else 'Unassigned',
-                    'type': str(row['FlowType']) if pd.notna(row['FlowType']) else 'Unknown',
-                    'uow_type': str(row['UOW_Job_Type']) if pd.notna(row['UOW_Job_Type']) else 'Unknown'
-                }
-        return pd.DataFrame([(k, v['project'], v['owner'], v['type'], v['uow_type']) 
-                          for k, v in flow_mapping.items()],
-                          columns=['FlowName', 'Project', 'Owner', 'Type', 'UOW_Type'])
+        return pd.DataFrame(mapping_data)
+        
+    except FileNotFoundError:
+        logger.warning("flow_mapping.json not found, creating default mapping")
+        return pd.DataFrame(columns=['FlowName', 'Project', 'Owner', 'Type', 'UOW_Type'])
     except Exception as e:
         logger.error(f"Error creating flow mapping: {e}")
         return pd.DataFrame(columns=['FlowName', 'Project', 'Owner', 'Type', 'UOW_Type'])
 
 def load_flow_mapping():
-    """Load or create flow mapping"""
+    """Load flow mapping from JSON"""
     try:
+        # Try loading from the cached CSV first for performance
         if Path('flow_mapping.csv').exists():
             return pd.read_csv('flow_mapping.csv')
         else:
+            # Create mapping from JSON source
             mapping_df = create_flow_mapper()
+            # Cache it for future use
             mapping_df.to_csv('flow_mapping.csv', index=False)
             return mapping_df
     except Exception as e:
@@ -605,10 +609,14 @@ def main():
                     st.warning("Error in refresh calculation. Try refreshing manually.")
         
         # Use the already loaded data from the sidebar
-        # Use the already loaded data from the sidebar
         if df is not None and not df.empty:
+            # Add debug logging
+            logger.info(f"Data loaded successfully: {len(df)} rows")
+            logger.info(f"Columns available: {df.columns.tolist()}")
+            
             # Filter data for selected date
             filtered_df = filter_data_by_date(df, selected_date, use_latest)
+            logger.info(f"After date filtering: {len(filtered_df)} rows")
             
             if filtered_df.empty:
                 st.warning(f"No data available for selected date: {selected_date}")
@@ -618,14 +626,16 @@ def main():
             flow_mapping = load_flow_mapping()
             
             # Process data for dashboard display
+            # Process data for dashboard display
             processed_df = process_data_for_dashboard(filtered_df)
+            logger.info(f"After processing: {len(processed_df)} rows")
             
             # Add project information from mapping
             if 'flowname' in processed_df.columns:
                 processed_df['automation_project'] = processed_df['flowname'].apply(
                     lambda x: get_project_for_flow(x, flow_mapping)
                 )
-            
+                logger.info(f"Projects mapped: {processed_df['automation_project'].nunique()} unique projects")
             if processed_df is not None and not processed_df.empty:
                 # Filter controls
                 col1, col2, col3 = st.columns(3)
@@ -650,17 +660,21 @@ def main():
                 if selected_owner != 'All Owners':
                     processed_df = processed_df[processed_df['owner'] == selected_owner]
                 
-                # Create matrix data
+                # Create matrix data with proper display names
                 bot_hour_status, display_names, hours = create_hourly_matrix(
                     processed_df,
-                    selected_project if selected_project != 'All Projects' else None,
-                    selected_status if selected_status != 'All Statuses' else None
+                    project_filter=selected_project if selected_project != 'All Projects' else None,
+                    status_filter=selected_status if selected_status != 'All Statuses' else None
                 )
                 
+                logger.info(f"Matrix created with {len(display_names)} display names and {len(hours)} hours")
+                
                 # Display matrix
-                # Display matrix
-                st.markdown("### Bot Activity Matrix")
-                display_matrix(bot_hour_status, display_names, hours)
+                if display_names:  # Check if we have data to display
+                    st.markdown("### Bot Activity Matrix")
+                    display_matrix(bot_hour_status, display_names, hours)
+                else:
+                    st.warning("No data to display for the selected filters.")
                 
                 # Show summary statistics with project information
                 st.markdown("### Data Summary")

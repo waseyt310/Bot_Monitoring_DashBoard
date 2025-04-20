@@ -9,6 +9,7 @@ from datetime import datetime
 import logging
 import re
 import gc
+import json
 from functools import lru_cache
 from typing import Dict, List, Tuple, Optional, Union
 from data_processing.validators import validate_processed_data, validate_matrix_data
@@ -24,6 +25,7 @@ logging.basicConfig(
 logger = logging.getLogger('data_processor')
 
 # Constants
+# Constants
 STATUS_PRIORITY = {
     "Failed": 100,      # Highest priority
     "Error": 100,
@@ -35,12 +37,12 @@ STATUS_PRIORITY = {
     "Completed": 60,
     "Done": 60,
     "Skipped": 40,      # Less important statuses
-    "Canceled": 30,
+    "Cancelled": 30,    # Matching actual status in data
+    "Canceled": 30,     # Alternative spelling
     "Suspended": 20,
     "Paused": 20,
     "No Run": 0         # Lowest priority
 }
-
 # Regex patterns (compiled for performance)
 CAMEL_CASE_PATTERN = re.compile(r'^([A-Z][a-z]+)')
 ALPHA_SEQUENCE_PATTERN = re.compile(r'[A-Za-z]{3,}')
@@ -109,67 +111,59 @@ def extract_project_name(flow_name: str) -> str:
         logger.error(f"Error extracting project from {flow_name}: {e}")
         return 'Unknown'
 
-def process_data_for_dashboard(df: pd.DataFrame, day_filter: Optional[Union[str, datetime]] = None) -> pd.DataFrame:
-    """
-    Process data with dynamic project mapping and optimized performance.
-    
-    Args:
-        df (pd.DataFrame): Raw DataFrame with bot data
-        day_filter (Optional[Union[str, datetime]]): Optional date filter
-        
-    Returns:
-        pd.DataFrame: Processed DataFrame ready for dashboard display
-    """
-
+def process_data_for_dashboard(df):
+    """Process data for dashboard display with enhanced flow mapping"""
     try:
         if df is None or df.empty:
-            logger.warning("Empty DataFrame passed to process_data_for_dashboard")
+            logger.warning("Empty dataframe passed to process_data_for_dashboard")
             return pd.DataFrame()
-        
-        # Create copy with needed columns
+            
+        # Create a copy to avoid modifying the original
         processed_df = df.copy()
         
-        # Ensure all needed columns exist
-        for col in PROCESS_COLUMNS:
-            if col not in processed_df.columns:
-                if col == 'wassuccessful':
-                    processed_df[col] = np.where(
-                        processed_df['taskstatus'] == 'Succeeded', 1, 0
-                    ) if 'taskstatus' in processed_df.columns else 0
-                elif col == 'triggertype':
-                    processed_df[col] = 'unknown'
-                else:
-                    processed_df[col] = None
+        # Load flow mapping
+        try:
+            with open('flow_mapping.json', 'r') as f:
+                flow_mapping = json.load(f)
+            logger.info(f"Loaded {len(flow_mapping)} flow mappings")
+        except Exception as e:
+            logger.warning(f"Could not load flow mapping, using fallback: {e}")
+            flow_mapping = {}
         
-        # Filter by day if specified
-        if day_filter:
-            try:
-                filter_date = pd.to_datetime(day_filter).date()
-                logger.info(f"Applying day filter for date: {filter_date}")
-                
-                # Ensure datetimestarted is datetime type
-                processed_df['datetimestarted'] = pd.to_datetime(processed_df['datetimestarted'], errors='coerce')
-                
-                # Handle NaT values
-                if processed_df['datetimestarted'].isna().any():
-                    logger.warning(f"Found {processed_df['datetimestarted'].isna().sum()} rows with invalid datetime values")
-                    processed_df = processed_df[~processed_df['datetimestarted'].isna()]
-                
-                # Apply date filter
-                processed_df = processed_df[processed_df['datetimestarted'].dt.date == filter_date]
-                logger.info(f"After date filtering: {len(processed_df)} records")
-            except Exception as e:
-                logger.error(f"Error during date filtering: {e}")
-                # Continue with unfiltered data
+        # Function to get project name from mapping
+        def get_project_name(flow_name):
+            if pd.isna(flow_name):
+                return 'Other Cloud Flow'
+            flow_key = str(flow_name).strip()
+            return flow_mapping.get(flow_key, {}).get('project', 'Other Cloud Flow')
         
-        # Add derived columns
+        # Apply flow mapping
+        processed_df['automation_project'] = processed_df['flowname'].apply(get_project_name)
+        
+        # Ensure status values match our priority dictionary
+        processed_df['taskstatus'] = processed_df['taskstatus'].map(
+            lambda x: x if x in STATUS_PRIORITY else 'No Run'
+        )
+        
+        # Ensure datetime columns are in proper format
+        processed_df['datetimestarted'] = pd.to_datetime(processed_df['datetimestarted'])
+        if 'datetimecompleted' in processed_df.columns:
+            processed_df['datetimecompleted'] = pd.to_datetime(processed_df['datetimecompleted'])
+        
+        # Add duration if both start and end times exist
+        if 'datetimecompleted' in processed_df.columns:
+            pass  # Placeholder for duration calculation
+        
         # Add derived columns
         processed_df['hour'] = pd.to_datetime(processed_df['datetimestarted']).dt.hour
         processed_df['owner'] = processed_df['flowowner'].str.replace(' serviceaccount', '').str.title()
+            
+        # Create display name for matrix - combining owner, project and flow
+        processed_df['display_name'] = processed_df.apply(
+            lambda row: f"{row['owner']} | {row['automation_project']} | {row['flowname']}", 
+            axis=1
+        )
         
-        # Only extract project name if automation_project doesn't exist
-        if 'automation_project' not in processed_df.columns:
-            processed_df['automation_project'] = processed_df['flowname'].apply(extract_project_name)
         # Add trigger type grouping
         if 'triggertype' in processed_df.columns:
             conditions = [
@@ -179,23 +173,27 @@ def process_data_for_dashboard(df: pd.DataFrame, day_filter: Optional[Union[str,
             choices = ['Manual', 'Recurrence']
             processed_df['trigger_group'] = np.select(conditions, choices, default='OtherTrigger')
         
-        # Create display name
-        processed_df['display_name'] = (
-            processed_df['owner'] + ' | ' + 
-            processed_df['automation_project'] + ' | ' + 
-            processed_df['flowname']
-        )
-        
-        # Add success rate calculation
+        # Ensure boolean columns are properly typed
         if 'wassuccessful' in processed_df.columns:
-            processed_df['success_rate'] = processed_df.groupby('flowname')['wassuccessful'].transform('mean') * 100
+            processed_df['wassuccessful'] = pd.to_numeric(processed_df['wassuccessful'], errors='coerce').fillna(0)
+            
+        # Calculate success rate
+        # Calculate success rate
+        processed_df['success_rate'] = processed_df['wassuccessful'] * 100
+        
+        # Add status priority for sorting
+        processed_df['status_priority'] = processed_df['taskstatus'].map(STATUS_PRIORITY).fillna(0)
+        
+        # Log processing results
+        logger.info(f"Processed {len(processed_df)} records")
+        logger.info(f"Unique projects: {processed_df['automation_project'].nunique()}")
+        logger.info(f"Unique display names: {processed_df['display_name'].unique().size} bots")
         
         # Cleanup to free memory
         gc.collect()
         
         logger.info(f"Data processing completed with {len(processed_df)} records")
         return processed_df
-        
     except Exception as e:
         logger.error(f"Error in process_data_for_dashboard: {e}")
         return pd.DataFrame()
@@ -232,172 +230,92 @@ def create_hourly_matrix(
         if df is None or df.empty:
             logger.warning("No data available for matrix creation")
             return {}, [], hours
-        
-        # Validate processed data
-        is_valid, message, validated_df = validate_processed_data(df)
-        if not is_valid:
-            logger.warning(f"Processed data validation warning: {message}")
-            if validated_df is not None:
-                df = validated_df
-            else:
-                return {}, [], hours
-        
-        # Optimize memory usage by selecting only needed columns
-        try:
-            # Extract only needed columns to reduce memory footprint
-            matrix_df = df[list(MATRIX_COLUMNS)].copy()
-        except KeyError as e:
-            logger.error(f"Missing required columns for matrix creation: {e}")
+
+        # Create hour column if not exists
+        if 'hour' not in df.columns:
+            df['hour'] = pd.to_datetime(df['datetimestarted']).dt.hour
+
+        # Check required columns
+        required_columns = {'display_name', 'automation_project', 'taskstatus', 'hour', 'datetimestarted'}
+        missing_columns = required_columns - set(df.columns)
+        if missing_columns:
+            logger.error(f"Missing required columns for matrix creation: {missing_columns}")
             return {}, [], hours
-        
-        # Apply filters with vectorized operations for performance
-        filter_mask = pd.Series(True, index=matrix_df.index)
-        orig_count = len(matrix_df)
-        
-        # Apply project filter if specified (vectorized operation)
-        if selected_project != 'All Projects':
-            project_mask = (matrix_df['automation_project'] == selected_project)
-            filter_mask &= project_mask
-            logger.info(f"Project filter '{selected_project}' matched {project_mask.sum()} of {orig_count} records")
             
-        # Apply status filter if specified (vectorized operation)
+        # Apply filters
+        mask = pd.Series(True, index=df.index)
+        orig_count = len(df)
+        
+        if selected_project != 'All Projects':
+            mask &= (df['automation_project'] == selected_project)
+            logger.info(f"Project filter applied: {selected_project}")
+            
         if selected_status != 'All Statuses':
-            status_mask = (matrix_df['taskstatus'] == selected_status)
-            filter_mask &= status_mask
-            logger.info(f"Status filter '{selected_status}' matched {status_mask.sum()} of {orig_count} records")
+            mask &= (df['taskstatus'] == selected_status)
+            logger.info(f"Status filter applied: {selected_status}")
         
-        # Apply combined filter in one operation (more efficient)
-        filtered_df = matrix_df.loc[filter_mask]
-        logger.info(f"Filtered from {len(matrix_df)} to {len(filtered_df)} records")
-        
-        # Clean up intermediate objects to free memory
-        del matrix_df
-        gc.collect()
+        filtered_df = df[mask].copy()
+        logger.info(f"Filtered from {orig_count} to {len(filtered_df)} records")
         
         # Check if we have data after filtering
         if filtered_df.empty:
             logger.warning("No data after filtering")
             return {}, [], hours
-            
-        # Validate that display_name column has correct format
-        invalid_display_names = filtered_df['display_name'].isna() | (filtered_df['display_name'] == '')
-        if invalid_display_names.any():
-            logger.warning(f"Found {invalid_display_names.sum()} rows with invalid display names")
-            filtered_df = filtered_df[~invalid_display_names]
-            
-            # If all display names were invalid, try to recreate them
-            if filtered_df.empty:
-                logger.warning("All display names were invalid, attempting to recreate")
-                try:
-                    # Get the original filtered dataframe again
-                    filtered_df = matrix_df.loc[filter_mask].copy()
-                    
-                    # Recreate display names
-                    filtered_df['owner'] = filtered_df.get('owner', 'Unknown')
-                    filtered_df['automation_project'] = filtered_df.get('automation_project', 'Unknown')
-                    filtered_df['flowname'] = filtered_df.get('flowname', 'Unknown')
-                    
-                    filtered_df['display_name'] = (
-                        filtered_df['owner'].fillna('Unknown') + ' | ' + 
-                        filtered_df['automation_project'].fillna('Unknown') + ' | ' + 
-                        filtered_df['flowname'].fillna('Unknown')
-                    )
-                    
-                    # Filter out any remaining invalid display names
-                    filtered_df = filtered_df[filtered_df['display_name'] != 'Unknown | Unknown | Unknown']
-                    
-                    if filtered_df.empty:
-                        logger.warning("Still no valid data after display name repair")
-                        return {}, [], hours
-                except Exception as e:
-                    logger.error(f"Error recreating display names: {e}")
-                    return {}, [], hours
-            
-        # Get display names with optimized approach
-        # Use np.array for memory efficiency over list
-        display_names_array = filtered_df['display_name'].unique()
         
-        # Smart selection of rows based on activity if too many rows
-        if len(display_names_array) > max_rows:
-            logger.warning(f"Too many display names ({len(display_names_array)}), using intelligent selection")
-            
-            # Use a smarter approach to select the most interesting bots
-            # Count statuses by display_name, prioritizing failures and actives
-            status_counts = (
-                filtered_df.groupby('display_name')['taskstatus']
-                .apply(lambda x: pd.Series({
-                    'failed': (x == 'Failed').sum(),
-                    'running': (x == 'Running').sum(),
-                    'total': len(x)
-                }))
-            )
-            
-            # Create score based on status counts (prioritize failures, then running, then total)
-            status_counts['score'] = (
-                status_counts['failed'] * 100 + 
-                status_counts['running'] * 10 + 
-                status_counts['total']
-            )
-            
-            # Select top bots by score
-            selected_names = status_counts.sort_values('score', ascending=False).head(max_rows).index.tolist()
-            display_names = selected_names
-            filtered_df = filtered_df[filtered_df['display_name'].isin(display_names)]
-        else:
-            display_names = display_names_array.tolist()
-        
-        # More efficient matrix creation using dict comprehension
+        # Smart selection of display names
+        display_names = (filtered_df.groupby('display_name')
+            .agg({
+                'taskstatus': lambda x: (x == 'Failed').sum() * 100 + 
+                                      (x == 'Running').sum() * 10 + 
+                                      len(x),
+                'datetimestarted': 'max'
+            })
+            .sort_values(['taskstatus', 'datetimestarted'], ascending=[False, False])
+            .head(max_rows)
+            .index.tolist())
+
+        # Create matrix dictionary
         bot_hour_status = {name: {hour: "No Run" for hour in hours} for name in display_names}
         
-        try:
-            # Use optimized groupby approach
-            # Group once by both dimensions for better performance
-            grouped = filtered_df.groupby(['display_name', 'hour'])
+        # Fill matrix efficiently
+        status_data = (filtered_df[filtered_df['display_name'].isin(display_names)]
+            .groupby(['display_name', 'hour'])['taskstatus']
+            .agg(lambda x: max(x, key=lambda s: STATUS_PRIORITY.get(s, 0)))
+            .to_dict())
             
-            # Process groups for matrix creation
-            for (name, hour), group in grouped:
-                if name in bot_hour_status and 0 <= hour <= 23:
-                    # Find highest priority status in this group efficiently
-                    # Use numpy operations for performance
-                    if len(group) > 0:
-                        status_values = group['taskstatus'].values
-                        
-                        # Find the status with highest priority using max with key function
-                        highest_status = max(
-                            np.unique(status_values),
-                            key=lambda x: STATUS_PRIORITY.get(x, 0)
-                        )
-                        
-                        bot_hour_status[name][hour] = highest_status
+        for (name, hour), status in status_data.items():
+            if name in bot_hour_status and 0 <= hour <= 23:
+                bot_hour_status[name][hour] = status
+
+        try:
+            # Debug logs for matrix data
+            logger.info(f"Matrix pre-validation: {len(bot_hour_status)} bots, {len(display_names)} display names")
+            if not display_names:
+                logger.warning("Empty display_names list before validation")
+                # Try to recover by using bot_hour_status keys
+                if bot_hour_status:
+                    display_names = list(bot_hour_status.keys())
+                    logger.info(f"Recovered {len(display_names)} display names from bot_hour_status keys")
+            
+            # Validate the matrix data before returning
+            is_valid, message, validated_data = validate_matrix_data(bot_hour_status, display_names, hours)
+            if not is_valid:
+                logger.warning(f"Matrix validation warning: {message}")
+                # Always attempt to return usable data even with validation issues
+                if validated_data and isinstance(validated_data, tuple) and len(validated_data) == 3:
+                    logger.info(f"Using validated data with {len(validated_data[1])} display names")
+                    return validated_data
+                else:
+                    logger.warning("Falling back to pre-validation data")
+                    return bot_hour_status, display_names, hours
+            
+            logger.info(f"Matrix creation completed with {len(display_names)} rows")
+            return validated_data
             
         except Exception as e:
-            logger.error(f"Error creating status matrix: {e}")
-            # Continue with what we have so far
-        
-        # Debug logs for matrix data
-        logger.info(f"Matrix pre-validation: {len(bot_hour_status)} bots, {len(display_names)} display names")
-        if not display_names:
-            logger.warning("Empty display_names list before validation")
-            # Try to recover by using bot_hour_status keys
-            if bot_hour_status:
-                display_names = list(bot_hour_status.keys())
-                logger.info(f"Recovered {len(display_names)} display names from bot_hour_status keys")
-        
-        # Validate the matrix data before returning
-        is_valid, message, validated_data = validate_matrix_data(bot_hour_status, display_names, hours)
-        if not is_valid:
-            logger.warning(f"Matrix validation warning: {message}")
-            # Always attempt to return usable data even with validation issues
-            if validated_data and isinstance(validated_data, tuple) and len(validated_data) == 3:
-                logger.info(f"Using validated data with {len(validated_data[1])} display names")
-                return validated_data
-            else:
-                logger.warning("Falling back to pre-validation data")
-                return bot_hour_status, display_names, hours
-        
-        logger.info(f"Matrix creation completed with {len(display_names)} rows")
-        return validated_data
-        
+            logger.error(f"Error in matrix validation: {e}")
+            return bot_hour_status, display_names, hours
+            
     except Exception as e:
         logger.error(f"Error creating hourly matrix: {e}")
         return {}, [], hours
